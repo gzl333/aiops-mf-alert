@@ -1,10 +1,13 @@
 import { RouteRecordRaw } from 'vue-router'
 
+// @mimas: allocated root path of current app, defined in package.json
+const appPath = process.env.appPath as string
+
 const routes: RouteRecordRaw[] = [
   {
-    path: '/my/alert',
+    path: appPath,
     component: () => import('layouts/MainLayout.vue'),
-    redirect: '/my/alert/service1',
+    redirect: appPath + '/service1',
     children: [
       {
         path: 'service1',
@@ -13,6 +16,11 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'service2',
         component: () => import('pages/Service2Page.vue')
+      },
+      // @mimas: about, updates, releases...
+      {
+        path: 'about',
+        component: () => import('pages/AboutPage.vue')
       }
     ]
   },

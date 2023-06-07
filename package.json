@@ -3,6 +3,7 @@
   "name": "@cnic/alert",
   "appId": "alert",
   "defaultPort": 9050,
+  "appPath": "/my/alert",
   "description": "Micro Frontend",
   "productName": "Micro Frontend",
   "author": "mimas",

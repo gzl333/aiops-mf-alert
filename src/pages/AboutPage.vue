@@ -28,8 +28,8 @@ import { logs } from 'src/configs/logs'
 
     <q-card flat bordered class="content-fixed-width q-mt-lg">
       <q-card-section>
-        <div class="text-h6">关于AIOps-Alert</div>
-        <div>AIOps告警应用</div>
+        <div class="text-h6">关于AIOps-Log</div>
+        <div>AIOps日志应用</div>
       </q-card-section>
 
       <!--      <q-separator inset/>-->
@@ -55,6 +55,7 @@ import { logs } from 'src/configs/logs'
             <div class="col-auto">*</div>
             <div class="col-auto text-grey-8">{{ update.info }}</div>
             <div class="col-auto text-grey-8">提交人: {{ update.commit_author }}</div>
+            <div class="col-auto text-grey-8">指导设计: {{ update.design_author }}</div>
           </div>
 
         </div>

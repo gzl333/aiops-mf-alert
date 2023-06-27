@@ -69,17 +69,6 @@ const appVersion = logs[0].version
             </q-item>
             <q-item
               clickable
-              :active="activeItem === 'record'"
-              @click="navigateToUrl(appPath + '/record')"
-              active-class="active-item"
-            >
-              <q-item-section class="column items-center">
-                <q-icon name="las la-server" size="lg"/>
-                <div class="active-text text-center">{{ tc('发送记录') }}</div>
-              </q-item-section>
-            </q-item>
-            <q-item
-              clickable
               :active="activeItem === 'convergence'"
               @click="navigateToUrl(appPath + '/convergence')"
               active-class="active-item"
@@ -87,6 +76,17 @@ const appVersion = logs[0].version
               <q-item-section class="column items-center">
                 <q-icon name="las la-server" size="lg"/>
                 <div class="active-text text-center">{{ tc('收敛信息') }}</div>
+              </q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              :active="activeItem === 'record'"
+              @click="navigateToUrl(appPath + '/record')"
+              active-class="active-item"
+            >
+              <q-item-section class="column items-center">
+                <q-icon name="las la-server" size="lg"/>
+                <div class="active-text text-center">{{ tc('发送记录') }}</div>
               </q-item-section>
             </q-item>
           </q-list>
@@ -105,7 +105,7 @@ const appVersion = logs[0].version
 
                 <div class="text-grey text-caption text-center">{{ tc('releaseTime') }}</div>
                 <div class="text-grey text-caption text-center">
-                  {{ new Date(releaseTime).toLocaleString(i18n.global.locale as string) }}
+                  {{ new Date(releaseTime).toLocaleString(i18n.global.locale) }}
                 </div>
               </q-tooltip>
             </q-icon>

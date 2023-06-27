@@ -1,13 +1,11 @@
 import { RouteRecordRaw } from 'vue-router'
-
 // @mimas: allocated root path of current app, defined in package.json
 const appPath = process.env.appPath as string
-
 const routes: RouteRecordRaw[] = [
   {
     path: appPath,
     component: () => import('layouts/MainLayout.vue'),
-    redirect: appPath + '/overview',
+    redirect: '/my/alert/overview',
     children: [
       {
         path: 'overview',

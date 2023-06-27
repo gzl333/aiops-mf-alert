@@ -46,28 +46,49 @@ const appVersion = logs[0].version
 
             <q-item
               clickable
-              :active="activeItem === 'service1'"
-              @click="navigateToUrl(appPath + '/service1')"
+              :active="activeItem === 'overview'"
+              @click="navigateToUrl(appPath + '/overview')"
               active-class="active-item"
             >
               <q-item-section class="column items-center">
                 <q-icon name="las la-video" size="lg"/>
-                <div class="active-text text-center">{{ tc('服务1') }}</div>
+                <div class="active-text text-center">{{ tc('告警概览') }}</div>
               </q-item-section>
             </q-item>
 
             <q-item
               clickable
-              :active="activeItem === 'service2'"
-              @click="navigateToUrl(appPath + '/service2')"
+              :active="activeItem === 'detail'"
+              @click="navigateToUrl(appPath + '/detail')"
               active-class="active-item"
             >
               <q-item-section class="column items-center">
                 <q-icon name="las la-server" size="lg"/>
-                <div class="active-text text-center">{{ tc('服务2') }}</div>
+                <div class="active-text text-center">{{ tc('告警详情') }}</div>
               </q-item-section>
             </q-item>
-
+            <q-item
+              clickable
+              :active="activeItem === 'record'"
+              @click="navigateToUrl(appPath + '/record')"
+              active-class="active-item"
+            >
+              <q-item-section class="column items-center">
+                <q-icon name="las la-server" size="lg"/>
+                <div class="active-text text-center">{{ tc('发送记录') }}</div>
+              </q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              :active="activeItem === 'convergence'"
+              @click="navigateToUrl(appPath + '/convergence')"
+              active-class="active-item"
+            >
+              <q-item-section class="column items-center">
+                <q-icon name="las la-server" size="lg"/>
+                <div class="active-text text-center">{{ tc('收敛信息') }}</div>
+              </q-item-section>
+            </q-item>
           </q-list>
 
           <div class="row justify-center q-pt-lg">

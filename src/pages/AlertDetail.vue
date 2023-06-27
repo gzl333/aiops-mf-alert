@@ -23,7 +23,7 @@
 
 <template>
   <div class="Service2Page">
-    this is Service2Page
+    this is ALERT DETAIL
   </div>
 </template>
 

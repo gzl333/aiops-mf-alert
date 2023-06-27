@@ -7,15 +7,23 @@ const routes: RouteRecordRaw[] = [
   {
     path: appPath,
     component: () => import('layouts/MainLayout.vue'),
-    redirect: appPath + '/service1',
+    redirect: appPath + '/overview',
     children: [
       {
-        path: 'service1',
-        component: () => import('pages/Service1Page.vue')
+        path: 'overview',
+        component: () => import('pages/overview.vue')
       },
       {
-        path: 'service2',
-        component: () => import('pages/Service2Page.vue')
+        path: 'detail',
+        component: () => import('pages/AlertDetail.vue')
+      },
+      {
+        path: 'record',
+        component: () => import('pages/AlertRecord.vue')
+      },
+      {
+        path: 'convergence',
+        component: () => import('pages/convergenceAlert.vue')
       },
       // @mimas: about, updates, releases...
       {

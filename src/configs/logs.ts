@@ -3,6 +3,18 @@ export const logs = [
   {
     version: 'v0.0.5',
     date: '2023-06-27',
+    time: '17:09:09',
+    release_author: 'zhjiang123',
+    updates: [
+      {
+        info: '告警平台概览，详情，收敛信息，发送记录初步页面开发',
+        commit_author: 'zhjiang123'
+      }
+    ]
+  },
+  {
+    version: 'v0.0.5',
+    date: '2023-06-27',
     time: '09:09:09',
     release_author: 'zhjiang123',
     updates: [

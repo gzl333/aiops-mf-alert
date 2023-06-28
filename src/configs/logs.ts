@@ -1,6 +1,18 @@
 // 更新日志内容，版本降序排列
 export const logs = [
   {
+    version: 'v0.0.6',
+    date: '2023-06-28',
+    time: '17:09:09',
+    release_author: 'zhjiang123',
+    updates: [
+      {
+        info: '告警平台详情信息表样式修改',
+        commit_author: '张睿博'
+      }
+    ]
+  },
+  {
     version: 'v0.0.5',
     date: '2023-06-27',
     time: '17:09:09',

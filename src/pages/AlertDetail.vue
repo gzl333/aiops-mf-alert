@@ -1,28 +1,34 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-const nginxLogTableRow = ref([{
-  id: 1,
-  alarm_name: '节点错误',
-  alarm_computer: '三号机',
-  severity: '严重',
-  alarm_time: '2023-06-27',
-  description: '系统崩溃'
-}, {
-  id: 2,
-  alarm_name: '节点崩溃',
-  alarm_computer: '四号机',
-  severity: '轻微',
-  alarm_time: '2023-06-28',
-  description: '系统崩溃'
-}])
+import { ref, computed, onMounted } from 'vue'
+import aiops from 'src/api/aiops'
+
+// const alertLogTableRow = ref([{
+//   id: 1,
+//   alertname: '节点错误',
+//   instance: '三号机',
+//   monitor_cluster: 'webMonitor_xxh',
+//   severity: '严重',
+//   alarm_time: '2023-06-27',
+//   description: '系统崩溃'
+// }, {
+//   id: 2,
+//   alertname: '节点崩溃',
+//   instance: '四号机',
+//   monitor_cluster: 'webMonitor_xxh',
+//   severity: '轻微',
+//   alarm_time: '2023-06-28',
+//   description: '系统崩溃'
+// }])
+
 // 数据表字段设计
-const nginxLogColumns = computed(() => [
+const alertLogColumns = computed(() => [
   { name: 'id', label: 'ID', align: 'center' },
-  { name: 'alarm_name', label: '告警名称', align: 'center' },
-  { name: 'alarm_computer', label: '告警主机', align: 'center' },
+  { name: 'alertname', label: '告警名称', align: 'center' },
+  { name: 'instance', label: '告警主机', align: 'center' },
+  { name: 'monitor_cluster', label: '监控集群', align: 'center' },
   { name: 'severity', label: '严重等级', align: 'center' },
   { name: 'alarm_time', label: '告警时间', align: 'center' },
-  { name: 'description', label: '详细描述', align: 'center' }
+  { name: 'description', label: '告警详情', align: 'center' }
 ])
 // 分页表变量
 const paginationTable = ref({
@@ -39,11 +45,23 @@ interface ServiceInterface {
   value?: string
 }
 const deviceOptions = ref< ServiceInterface[] >([])
-deviceOptions.value.push({ label: '1', label_en: '1', value: '1' }, { label: '2', label_en: '2', value: '2' }, { label: '3', label_en: '3', value: '3' })
+deviceOptions.value.push({ label: 'webMonitor_xxh', label_en: 'webMonitor_xxh', value: 'webMonitor_xxh' }, { label: 'goscMetrics', label_en: 'goscMetrics', value: 'goscMetrics' }, { label: 'mail_metric', label_en: 'mail_metric', value: 'mail_metric' }, { label: 'mail_log', label_en: 'mail_log', value: 'mail_log' }, { label: 'aiopsMetrics', label_en: 'aiopsMetrics', value: 'aiopsMetrics' }, { label: 'casearthMetrics', label_en: 'casearthMetrics', value: 'casearthMetrics' }, { label: 'aiopsK8sMetrics', label_en: 'aiopsK8sMetrics', value: 'aiopsK8sMetrics' }, { label: 'webMonitor_zgc', label_en: 'webMonitor_zgc', value: 'webMonitor_zgc' })
 const device = ref({
   label: '全部设备',
   labelEn: 'All Device',
   value: ''
+})
+const OriginAlertResultInfo = ref()
+const getOriginAlertinfo = async () => {
+  await aiops.login.alert.getOriginAlertUrl({ query: {} }).then((res) => {
+    OriginAlertResultInfo.value = res.data.results.slice(0, 5000)
+  })
+}
+
+onMounted(async () => {
+  setTimeout(async () => {
+    await getOriginAlertinfo()
+  }, 50)
 })
 </script>
 
@@ -89,27 +107,25 @@ const device = ref({
                     id="StorageMeteringTable"
                     card-class="no-padding"
                     table-header-class="bg-grey-1 text-grey"
-                    :rows="nginxLogTableRow"
-                    :columns="nginxLogColumns"
+                    :rows="OriginAlertResultInfo"
+                    :columns="alertLogColumns"
                     row-key="name"
                     color="primary"
                     :loading-label="'notifyLoading'"
                     :no-data-label="'noData'"
-                    hide-pagination
-                    :pagination="{ rowsPerPage: 0 }"
+                    :pagination="{ rowsPerPage: 100 }"
                   >
                     <template v-slot:body="props">
                       <q-tr :props="props">
                         <q-td class="no-padding"  key="id" :props="props">
                           {{ props.row.id}}
                         </q-td>
-                        <q-td class="no-padding"  key="alarm_name" :props="props">{{ props.row.alarm_name }}</q-td>
-                        <q-td class="no-padding" style="white-space:normal;word-break:break-all;word-wrap:break-word;" key="alarm_computer" :props="props">{{ props.row.alarm_computer}}</q-td>
+                        <q-td class="no-padding"  key="alertname" :props="props">{{ props.row.alertname }}</q-td>
+                        <q-td class="no-padding" style="white-space:normal;word-break:break-all;word-wrap:break-word;" key="instance" :props="props">{{ props.row.instance}}</q-td>
+                        <q-td class="no-padding" style="white-space:normal;word-break:break-all;word-wrap:break-word;" key="monitor_cluster" :props="props">{{ props.row.monitor_cluster}}</q-td>
                         <q-td class="no-padding" style="white-space:normal;word-break:break-all;word-wrap:break-word;" key="severity" :props="props">{{ props.row.severity}}</q-td>
-                        <q-td class="no-padding" key="alarm_time" :props="props">
-                          {{ props.row.alarm_time }}
-                        </q-td>
-                        <q-td class="no-padding" key="description" :props="props">{{ props.row.description}}</q-td>
+                        <q-td class="no-padding" key="alarm_time" :props="props">{{ props.row.startsAt }}</q-td>
+                        <q-td class="no-padding" style="white-space:normal;word-break:break-all;word-wrap:break-word;" key="description" :props="props">{{ props.row.description}}</q-td>
                       </q-tr>
                     </template>
                     <template v-slot:top-right>

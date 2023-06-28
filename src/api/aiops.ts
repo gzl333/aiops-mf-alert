@@ -3,8 +3,22 @@
 
 /* eslint-disable camelcase */
 
-// import { axiosAiops } from 'boot/axios'
+import { axiosAiops } from 'boot/axios'
 
 export default {
-  //  apis
+  login: {
+    alert: {
+      getOriginAlertUrl (payload: {
+        query: {
+          // clientUrl: string;
+          // type?: string;
+        }
+      }) {
+        const config = {
+          params: payload.query
+        }
+        return axiosAiops.get('/v1/mail/alert/alertlog/', config)
+      }
+    }
+  }
 }

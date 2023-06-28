@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue'
 const nginxLogTableRow = ref([{
   id: 1,
-  alarm_name: '节点错误',
+  alertname: '节点错误',
   alarm_computer: '三号机',
   severity: '严重',
   alarm_time: '2023-06-27',
@@ -10,7 +10,7 @@ const nginxLogTableRow = ref([{
   convergence_number: '1200'
 }, {
   id: 2,
-  alarm_name: '节点崩溃',
+  alertname: '节点崩溃',
   alarm_computer: '四号机',
   severity: '轻微',
   alarm_time: '2023-06-28',
@@ -20,7 +20,7 @@ const nginxLogTableRow = ref([{
 // 数据表字段设计
 const nginxLogColumns = computed(() => [
   { name: 'id', label: 'ID', align: 'center' },
-  { name: 'alarm_name', label: '告警名称', align: 'center' },
+  { name: 'alertname', label: '告警名称', align: 'center' },
   { name: 'alarm_computer', label: '告警主机', align: 'center' },
   { name: 'severity', label: '严重等级', align: 'center' },
   { name: 'alarm_time', label: '告警时间', align: 'center' },
@@ -105,7 +105,7 @@ const device = ref({
                         <q-td class="no-padding"  key="id" :props="props">
                           {{ props.row.id}}
                         </q-td>
-                        <q-td class="no-padding"  key="alarm_name" :props="props">{{ props.row.alarm_name }}</q-td>
+                        <q-td class="no-padding"  key="alertname" :props="props">{{ props.row.alertname }}</q-td>
                         <q-td class="no-padding" style="white-space:normal;word-break:break-all;word-wrap:break-word;" key="alarm_computer" :props="props">{{ props.row.alarm_computer}}</q-td>
                         <q-td class="no-padding" style="white-space:normal;word-break:break-all;word-wrap:break-word;" key="severity" :props="props">{{ props.row.severity}}</q-td>
                         <q-td class="no-padding" key="alarm_time" :props="props">

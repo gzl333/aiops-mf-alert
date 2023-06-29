@@ -34,9 +34,8 @@ const alertLogColumns = computed(() => [
 const paginationTable = ref({
   page: 1,
   count: 0,
-  rowsPerPage: 10
+  rowsPerPage: 100
 })
-
 const search = ref()
 // 服务单元筛选框数据类型接口
 interface ServiceInterface {
@@ -52,12 +51,34 @@ const device = ref({
   value: ''
 })
 const OriginAlertResultInfo = ref()
+const date = new Date()
+const timestamp = date.getTime() / 1000
+const onday = 60 * 60
+const beforeTime = timestamp - onday
+const queryInfo = ref({
+  start: beforeTime,
+  end: timestamp,
+  offset: 0,
+  limit: 100
+})
 const getOriginAlertinfo = async () => {
-  await aiops.login.alert.getOriginAlertUrl({ query: {} }).then((res) => {
-    OriginAlertResultInfo.value = res.data.results.slice(0, 5000)
+  await aiops.login.alert.getOriginAlertUrl({ query: queryInfo.value }).then((res) => {
+    OriginAlertResultInfo.value = res.data.results
+    paginationTable.value.count = res.data.count
   })
 }
+// const changePageSize = () => {
+//   query.value.page_size = paginationTable.value.rowsPerPage
+//   query.value.page = 1
+//   paginationTable.value.page = 1
+//   getUserMetering()
+// }
 
+const changePagination = () => {
+  const offset = Math.floor(paginationTable.value.page - 1) * 100
+  queryInfo.value.offset = offset
+  getOriginAlertinfo()
+}
 onMounted(async () => {
   setTimeout(async () => {
     await getOriginAlertinfo()
@@ -113,6 +134,7 @@ onMounted(async () => {
                     color="primary"
                     :loading-label="'notifyLoading'"
                     :no-data-label="'noData'"
+                    hide-pagination
                     :pagination="{ rowsPerPage: 100 }"
                   >
                     <template v-slot:body="props">

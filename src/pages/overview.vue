@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import * as echarts from 'echarts'
 import { ref, onMounted } from 'vue'
+import aiops from 'src/api/aiops'
 // 绘制图表
 const serverityOption = {
   title: {
@@ -260,6 +261,52 @@ onMounted(async () => {
     height: 500
   })
 })
+
+const AlertOverview = ref({
+  AlertCount: 0,
+  MetricAlertCount: 0,
+  LogAlertCount: 0
+})
+const date = new Date()
+const timestamp = date.getTime() / 1000
+const onday = 60 * 60 * 24
+const beforeTime = timestamp - onday
+const queryAllAlertCount = ref({
+  start: beforeTime,
+  end: timestamp
+})
+const queryMetricAlertCount = ref({
+  start: beforeTime,
+  end: timestamp,
+  alert_type: 'metric'
+})
+const querylogAlertCount = ref({
+  start: beforeTime,
+  end: timestamp,
+  alert_type: 'log'
+})
+const getAllAlertCount = async () => {
+  await aiops.login.alert.getOriginAlertUrl({ query: queryAllAlertCount.value }).then((res) => {
+    AlertOverview.value.AlertCount = res.data.count
+  })
+}
+const getMetricAlertCount = async () => {
+  await aiops.login.alert.getOriginAlertUrl({ query: queryMetricAlertCount.value }).then((res) => {
+    AlertOverview.value.MetricAlertCount = res.data.count
+  })
+}
+const getLogAlertCount = async () => {
+  await aiops.login.alert.getOriginAlertUrl({ query: querylogAlertCount.value }).then((res) => {
+    AlertOverview.value.LogAlertCount = res.data.count
+  })
+}
+onMounted(async () => {
+  setTimeout(async () => {
+    getAllAlertCount()
+    getMetricAlertCount()
+    getLogAlertCount()
+  }, 50)
+})
 </script>
 
 <template>
@@ -276,9 +323,9 @@ onMounted(async () => {
                 <q-card class="col-4 column justify-center no-shadow   " style="background-color: #ffffff">
                   <q-card-section class="bg-white">
                     <div class="column justify-start">
-                      <div style="font-size: 15px" class="row justify-start  col-3 "><span>当日告警总数</span>
+                      <div style="font-size: 15px" class="row justify-start  col-3 "><span>24小时内告警总数</span>
                       </div>
-                      <div style="font-size: 30px" class="row justify-start q-pl-sm col-3"><span> 500000</span>
+                      <div style="font-size: 30px" class="row justify-start q-pl-sm col-3"><span>{{AlertOverview.AlertCount}}</span>
                       </div>
                     </div>
                   </q-card-section>
@@ -288,7 +335,7 @@ onMounted(async () => {
                     <div class="column justify-start">
                       <div style="font-size: 15px" class="row justify-start  col-3 "><span>指标类告警</span>
                       </div>
-                      <div style="font-size: 30px" class="row justify-start q-pl-sm col-3"><span> 10,000,000</span>
+                      <div style="font-size: 30px" class="row justify-start q-pl-sm col-3"><span>{{ AlertOverview.MetricAlertCount }} </span>
                       </div>
                     </div>
                   </q-card-section>
@@ -298,7 +345,7 @@ onMounted(async () => {
                     <div class="column justify-start">
                       <div style="font-size: 15px" class="row justify-start  col-3 "><span>日志类告警</span>
                       </div>
-                      <div style="font-size: 30px" class="row justify-start q-pl-sm col-3"><span> 7888</span>
+                      <div style="font-size: 30px" class="row justify-start q-pl-sm col-3"><span> {{ AlertOverview.LogAlertCount }}</span>
                       </div>
                     </div>
                   </q-card-section>

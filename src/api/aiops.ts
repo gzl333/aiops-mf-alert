@@ -12,6 +12,11 @@ export default {
         query: {
           // clientUrl: string;
           // type?: string;
+          start: number
+          end: number
+          offset?: number
+          limit?: number
+          alert_type?: string
         }
       }) {
         const config = {

@@ -89,10 +89,10 @@ const TargetNumberTypeOption = {
       radius: '50%',
       data: [
         { value: 100, name: 'HostOutOfMemory' },
-        { value: 150, name: 'HostUnusualDiskLog' },
+        { value: 150, name: 'HostUnusualDiskIo' },
         { value: 210, name: 'HostHighCpuLoad' },
         { value: 152, name: 'HostOutOfDiskSpace' },
-        { value: 155, name: 'HostCpuHighLoWait' }
+        { value: 155, name: 'HostCpuHighIowait' }
       ],
       emphasis: {
         itemStyle: {

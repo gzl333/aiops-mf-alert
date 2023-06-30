@@ -17,6 +17,8 @@ export default {
           offset?: number
           limit?: number
           alert_type?: string
+          monitor_cluster?: string
+          alertname?: string
         }
       }) {
         const config = {

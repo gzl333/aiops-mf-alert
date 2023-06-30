@@ -44,7 +44,7 @@ interface ServiceInterface {
   value?: string
 }
 const deviceOptions = ref< ServiceInterface[] >([])
-deviceOptions.value.push({ label: 'webMonitor_xxh', label_en: 'webMonitor_xxh', value: 'webMonitor_xxh' }, { label: 'goscMetrics', label_en: 'goscMetrics', value: 'goscMetrics' }, { label: 'mail_metric', label_en: 'mail_metric', value: 'mail_metric' }, { label: 'mail_log', label_en: 'mail_log', value: 'mail_log' }, { label: 'aiopsMetrics', label_en: 'aiopsMetrics', value: 'aiopsMetrics' }, { label: 'casearthMetrics', label_en: 'casearthMetrics', value: 'casearthMetrics' }, { label: 'aiopsK8sMetrics', label_en: 'aiopsK8sMetrics', value: 'aiopsK8sMetrics' }, { label: 'webMonitor_zgc', label_en: 'webMonitor_zgc', value: 'webMonitor_zgc' })
+deviceOptions.value.push({ label: '全部设备', label_en: 'all_devices', value: 'all_devices' }, { label: '网站监测点(信息化大厦）', label_en: 'webMonitor_xxh', value: 'webMonitor_xxh' }, { label: '全球开放科学云集群', label_en: 'goscMetrics', value: 'goscMetrics' }, { label: '邮件系统性能指标', label_en: 'mail_metric', value: 'mail_metric' }, { label: '邮件系统非业务类日志', label_en: 'mail_log', value: 'mail_log' }, { label: ' 运维大数据平台物理服务器集群', label_en: 'aiopsMetrics', value: 'aiopsMetrics' }, { label: '地球大数据集群', label_en: 'casearthMetrics', value: 'casearthMetrics' }, { label: '运维大数据平台物理云主机集群', label_en: 'aiopsK8sMetrics', value: 'aiopsK8sMetrics' }, { label: '网站监测点(软件园区）', label_en: 'webMonitor_zgc', value: 'webMonitor_zgc' })
 const device = ref({
   label: '全部设备',
   labelEn: 'All Device',
@@ -53,13 +53,15 @@ const device = ref({
 const OriginAlertResultInfo = ref()
 const date = new Date()
 const timestamp = date.getTime() / 1000
-const onday = 60 * 60
+const onday = 60 * 60 * 24
 const beforeTime = timestamp - onday
 const queryInfo = ref({
   start: beforeTime,
   end: timestamp,
   offset: 0,
-  limit: 100
+  limit: 100,
+  monitor_cluster: '',
+  alertname: ''
 })
 const getOriginAlertinfo = async () => {
   await aiops.login.alert.getOriginAlertUrl({ query: queryInfo.value }).then((res) => {
@@ -79,6 +81,26 @@ const changePagination = () => {
   queryInfo.value.offset = offset
   getOriginAlertinfo()
 }
+
+const changeMonitorcluster = (device: string) => {
+  let monitorcluster = ''
+  if (device === 'all_devices') {
+    monitorcluster = ''
+  } else {
+    monitorcluster = device
+  }
+  queryInfo.value.monitor_cluster = monitorcluster
+  queryInfo.value.offset = 0
+  paginationTable.value.page = 1
+  getOriginAlertinfo()
+}
+
+const searchAlertbyName = () => {
+  const alertname = search.value
+  queryInfo.value.alertname = alertname
+  getOriginAlertinfo()
+}
+
 onMounted(async () => {
   setTimeout(async () => {
     await getOriginAlertinfo()
@@ -107,7 +129,7 @@ onMounted(async () => {
                 <div class="row justify-start">
                   <div class="col-6 row justify-start">
                     <div class="col-5 q-mr-lg">
-                      <q-input dense outlined v-model="search" placeholder="请输入名称，主机">
+                      <q-input dense outlined v-model="search" placeholder="请输入告警名称">
                         <template v-slot:prepend>
                           <q-icon name="search"/>
                         </template>
@@ -117,8 +139,8 @@ onMounted(async () => {
                       </q-input>
                     </div>
                     <div class='col-2 q-mr-lg'>
-                      <q-btn style="height: 40px"  outline label="筛选" class="q-px-lg q-ml-lg" @click="search"/></div>
-                    <q-select v-model="device" :options="deviceOptions" label="请选择" outlined class=" row col-3 q-py-ms q-mr-lg" dense/>
+                      <q-btn style="height: 40px"  outline label="筛选" class="q-px-lg q-ml-lg" @click="searchAlertbyName()"/></div>
+                    <q-select v-model="device" :options="deviceOptions" label="请选择集群" outlined class=" row col-3 q-py-ms q-mr-lg" @update:model-value="changeMonitorcluster(device.value)" dense/>
                   </div>
                 </div>
                 <div class="row justify-center" >
@@ -168,7 +190,7 @@ onMounted(async () => {
                           :label="'导出全部数据'"
                           no-caps
                           dense
-                          @click="exportAllTable"
+                          @click="exportAllTable()"
                         />
                         <span class="text-grey"> (注: 限制导出最大记录数为 1000)</span>
                       </div>
@@ -180,8 +202,8 @@ onMounted(async () => {
                   <div class="row col-12  justify-start ">
                     <div class="col-4 justify-start row ">
                       <span class="q-ml-xl q-pt-sm q-pr-md " >共{{ paginationTable.count }}条数据</span>
-                      <q-select class="q-pt-none" color="grey" v-model="paginationTable.rowsPerPage" :options="[10,15,20,25,30]" dense options-dense
-                                borderless @update:model-value="changePageSize">
+                      <q-select class="q-pt-none" color="grey" v-model="paginationTable.rowsPerPage"  dense options-dense
+                                borderless >
                       </q-select>
                       <span class="q-pt-sm ">页</span>
                     </div>

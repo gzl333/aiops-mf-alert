@@ -1,6 +1,30 @@
 // 更新日志内容，版本降序排列
 export const logs = [
   {
+    version: 'v0.0.8',
+    date: '2023-06-30',
+    time: '17:09:09',
+    release_author: 'zhjiang123',
+    updates: [
+      {
+        info: '增加按集群、按名称筛选告警信息功能',
+        commit_author: '张睿博'
+      }
+    ]
+  },
+  {
+    version: 'v0.0.7',
+    date: '2023-06-29',
+    time: '17:09:09',
+    release_author: 'zhjiang123',
+    updates: [
+      {
+        info: '告警数据表分页功能增加',
+        commit_author: '张睿博'
+      }
+    ]
+  },
+  {
     version: 'v0.0.6',
     date: '2023-06-28',
     time: '17:09:09',

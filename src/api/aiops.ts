@@ -24,7 +24,7 @@ export default {
         const config = {
           params: payload.query
         }
-        return axiosAiops.get('/v1/mail/alert/alertlog/', config)
+        return axiosAiops.get('/v1/alert/origin-alert/', config)
       }
     }
   }
